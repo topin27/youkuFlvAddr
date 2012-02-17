@@ -1,0 +1,1 @@
+这个代码用于获取优酷视频的地址，很简单，不长，只是用于熟悉github的环境。其实相关分析很多地方都有，而我是参考了“3shi天下”的一篇博文（地址：http://3shi.net/analyze-youku-video-address/），然后用C++实现的。
