@@ -17,7 +17,7 @@ void gen_sid(string &sid_) {
 	sid_ = strStrm.str();
 }
 
-string &gen_fileid(int seed_, string &fileid_) {
+string gen_fileid(int seed_, const string &k_fileid_) {
 	string mixed;
 	string source = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ/\\:._-1234567890";
 	int index, len = (int)source.size();
@@ -29,12 +29,12 @@ string &gen_fileid(int seed_, string &fileid_) {
 		source.erase(index, 1);
 	}
 	
-	string::iterator it1 = fileid_.begin(), it2;
+	string::const_iterator it1 = k_fileid_.begin(), it2;
 	it2 = it1;
 	std::vector<int> ids;
-	while (it1 != fileid_.end()) {
+	while (it1 != k_fileid_.end()) {
 		if (*it1 == '*') {
-			ids.push_back(atoi((fileid_.substr(it2 - fileid_.begin(), it1 - it2)).c_str()));
+			ids.push_back(atoi((k_fileid_.substr(it2 - k_fileid_.begin(), it1 - it2)).c_str()));
 			++it1;
 			it2 = it1;
 		}
@@ -42,10 +42,10 @@ string &gen_fileid(int seed_, string &fileid_) {
 			++it1;
 	}
 
-	fileid_ = "";
+	string fileid = "";
 	for (size_t i = 0; i < ids.size(); ++i)
-		fileid_.push_back(mixed[ids[i]]);
-	return fileid_;
+		fileid.push_back(mixed[ids[i]]);
+	return fileid;
 }
 
 //linux下C++版的itoa函数，原文地址：http://www.jb.man.ac.uk/~slowe/cpp/itoa.html
@@ -66,9 +66,10 @@ static string itoa(int value_, int base_) {
 	return buf;
 }
 
-string &gen_key(const string &k_key1_, string &key2_) {
-	unsigned int key = (unsigned int)strtoul(k_key1_.c_str(), NULL, 16);
-	key ^= 0xA55AA5A5;
-	key2_ += itoa(key, 16);
-	return key2_;
+string gen_key(const string &k_key1_, const string &k_key2_) {
+	unsigned int keyNum = (unsigned int)strtoul(k_key1_.c_str(), NULL, 16);
+	keyNum ^= 0xA55AA5A5;
+	string key = itoa(keyNum, 16); 
+	key = k_key2_ + key;
+	return key;
 }
